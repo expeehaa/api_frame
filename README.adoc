@@ -1,0 +1,13 @@
+== ApiFrame
+
+ApiFrame is a gem that aims to provide an easy-to-use way of implementing high-level and low-level interactions with APIs working over HTTP.
+
+=== Installation
+
+Add the gem `api_frame` as a runtime dependency to your library’s `gemspec`.
+
+=== Development
+
+After checking out the repository, run `bin/setup` to install dependencies.
+For an interactive Pry session, run `bin/console`.
+Run `rake spec` to run the tests.

@@ -1,0 +1,7 @@
+syntax: glob
+
+.bundle/
+pkg/
+.rspec_status
+.swp
+Gemfile.lock
