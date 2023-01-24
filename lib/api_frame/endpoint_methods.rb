@@ -15,6 +15,10 @@ module ApiFrame
 			{}
 		end
 		
+		def default_content_type
+			'application/json'
+		end
+		
 		def perform_request(method, api_path, query: nil, body: nil, headers: nil)
 			uri = self.base_uri + api_path
 			uri.query = URI.encode_www_form(query) if query
@@ -26,7 +30,7 @@ module ApiFrame
 					end
 					
 					if body
-						request['Content-Type'] = 'application/json'
+						request['Content-Type'] = default_content_type
 						request.body            = body
 					end
 				end.then do |request|
