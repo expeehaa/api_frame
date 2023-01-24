@@ -9,6 +9,8 @@ Gem::Specification.new do |spec|
 	spec.email   = ['expeehaa@outlook.com']
 	spec.summary = 'Small framework to define API clients in Ruby'
 	
+	spec.homepage = 'https://github.com/expeehaa/api_frame'
+	
 	spec.metadata['allowed_push_host'    ] = 'https://rubygems.org'
 	spec.metadata['rubygems_mfa_required'] = 'true'
 	
