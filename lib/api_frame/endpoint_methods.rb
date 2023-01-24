@@ -26,7 +26,7 @@ module ApiFrame
 					when :post
 						Net::HTTP::Post
 					else
-						raise ArgumentError, "Invalid method #{method.inspect}."
+						raise ArgumentError, "Unsupported method #{method.inspect}."
 				end.new(uri).tap do |request|
 					endpoint_headers.merge(headers || {}).each do |name, value|
 						request[name] = value
