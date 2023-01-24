@@ -39,14 +39,6 @@ module ApiFrame
 			end
 		end
 		
-		def transform_response(response)
-			if response.is_a?(Net::HTTPSuccess)
-				JSON.parse(response.body)
-			else
-				raise ApiFrame::NoSuccessError, response
-			end
-		end
-		
 		def self.included(klass)
 			klass.extend(ClassMethods)
 		end
@@ -59,7 +51,11 @@ module ApiFrame
 					
 					perform_request(method, uri, body: request_body, query: kwargs.key?(:query) ? kwargs.fetch(:query) : nil, headers: kwargs.key?(:headers) ? kwargs.fetch(:headers) : nil).then do |response|
 						if !kwargs.key?(:plain_response) || !kwargs.fetch(:plain_response)
-							transform_response(response)
+							if response.is_a?(Net::HTTPSuccess)
+								JSON.parse(response.body)
+							else
+								raise ApiFrame::NoSuccessError, response
+							end
 						else
 							response
 						end
