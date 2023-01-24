@@ -7,6 +7,10 @@ require_relative 'utils'
 
 module ApiFrame
 	module EndpointMethods
+		def base_uri
+			raise NotImplementedError
+		end
+		
 		def endpoint_headers
 			{}
 		end
