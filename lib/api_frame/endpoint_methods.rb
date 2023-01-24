@@ -20,14 +20,7 @@ module ApiFrame
 			uri.query = URI.encode_www_form(query) if query
 			
 			Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
-				case method
-					when :get
-						Net::HTTP::Get
-					when :post
-						Net::HTTP::Post
-					else
-						raise ArgumentError, "Unsupported method #{method.inspect}."
-				end.new(uri).tap do |request|
+				ApiFrame::Utils.request_type_from_method_argument(method).new(uri).tap do |request|
 					endpoint_headers.merge(headers || {}).each do |name, value|
 						request[name] = value
 					end

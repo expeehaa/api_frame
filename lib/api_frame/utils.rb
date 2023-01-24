@@ -24,5 +24,16 @@ module ApiFrame
 			
 			proc.call(*args, **proc_keys, &block)
 		end
+		
+		def self.request_type_from_method_argument(method)
+			if method.instance_of?(Class) && method.ancestors.include?(Net::HTTPRequest)
+				method
+			else
+				{
+					get:  Net::HTTP::Get,
+					post: Net::HTTP::Post,
+				}.fetch(method)
+			end
+		end
 	end
 end

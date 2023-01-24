@@ -50,4 +50,35 @@ RSpec.describe ApiFrame::Utils do
 			expect(ApiFrame::Utils.call_proc_without_unknown_keywords(proc{ |a, *args, x:, **kwargs| kwargs },     x: 4, y: 2)).to eq({y: 2})
 		end
 	end
+	
+	describe '.request_type_from_method_argument' do
+		it 'returns the argument if it is a subclass of Net::HTTPRequest' do
+			[
+				Net::HTTP::Get,
+				Net::HTTP::Post,
+				Net::HTTP::Patch,
+				Net::HTTP::Delete,
+				Net::HTTP::Put,
+			].each do |type|
+				expect(ApiFrame::Utils.request_type_from_method_argument(type)).to eq type
+			end
+		end
+		
+		it 'maps some symbols to the request types' do
+			expect(ApiFrame::Utils.request_type_from_method_argument(:get   )).    to eq Net::HTTP::Get
+			expect(ApiFrame::Utils.request_type_from_method_argument(:post  )).    to eq Net::HTTP::Post
+		end
+		
+		it 'raises an error for invalid methods' do
+			expect{ApiFrame::Utils.request_type_from_method_argument(:patch )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(:delete)}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(:put   )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(1      )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument('get'  )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument([1, 2] )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(nil    )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(false  )}.to raise_error KeyError
+			expect{ApiFrame::Utils.request_type_from_method_argument(true   )}.to raise_error KeyError
+		end
+	end
 end
