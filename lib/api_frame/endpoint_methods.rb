@@ -19,6 +19,12 @@ module ApiFrame
 			'application/json'
 		end
 		
+		def default_response_parser
+			proc do |response|
+				JSON.parse(response.body)
+			end
+		end
+		
 		def perform_request(method, api_path, query: nil, body: nil, headers: nil)
 			uri = self.base_uri + api_path
 			uri.query = URI.encode_www_form(query) if query
@@ -52,7 +58,7 @@ module ApiFrame
 					perform_request(method, uri, body: request_body, query: kwargs.key?(:query) ? kwargs.fetch(:query) : nil, headers: kwargs.key?(:headers) ? kwargs.fetch(:headers) : nil).then do |response|
 						if !kwargs.key?(:plain_response) || !kwargs.fetch(:plain_response)
 							if response.is_a?(Net::HTTPSuccess)
-								JSON.parse(response.body)
+								default_response_parser.call(response)
 							else
 								raise ApiFrame::NoSuccessError, response
 							end
