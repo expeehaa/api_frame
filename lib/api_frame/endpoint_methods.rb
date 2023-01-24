@@ -11,7 +11,7 @@ module ApiFrame
 			raise NotImplementedError
 		end
 		
-		def endpoint_headers
+		def default_headers
 			{}
 		end
 		
@@ -25,7 +25,7 @@ module ApiFrame
 			
 			Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
 				ApiFrame::Utils.request_type_from_method_argument(method).new(uri).tap do |request|
-					endpoint_headers.merge(headers || {}).each do |name, value|
+					default_headers.merge(headers || {}).each do |name, value|
 						request[name] = value
 					end
 					
